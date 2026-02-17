@@ -1,0 +1,29 @@
+{
+  "name": "dev-engines",
+  "type": "module",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheJaredWilcurt/devEngines.git"
+  },
+  "author": "The Jared Wilcurt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheJaredWilcurt/devEngines/issues"
+  },
+  "homepage": "https://github.com/TheJaredWilcurt/devEngines#readme",
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "25.6.1"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": "11.9.0"
+    }
+  }
+}

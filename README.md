@@ -8,6 +8,25 @@
 
 This tool, devEngines CLI, makes it impossible for you to be on the wrong Node or npm version. With it installed, any time you are in a project that has the Node or npm version defined in the `package.json`, it will switch to that version automatically. You never have to run any commands, just set the value in the official "[devEngines](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#devengines)" part of the `package.json`. This location is defined in the official `package.json` specification. If you want to pin a specific version number, or update to the latest version of a tool, the `devEngines` CLI offers the following commands.
 
+* **Standards compliant**
+  * Uses the official "devEngines" standard in the `package.json`.
+    * *Used by npm, pnpm, corepack, etc.*
+* **Cross-Platform**
+  * Works the same for everyone on your team.
+  * One set of setup instructions for everyone.
+  * Runs anywhere Node runs.
+* **Long-term reliability**
+  * Open source (MIT licensed)
+  * Written in JS
+  * Can easily be maintained by the JS community
+* **Fully automatic**
+  * Automatically switches to the correct Node/npm version required by your project.
+  * Downloads the Node/npm versions automatically on first use.
+  * It is impossible to be on the wrong version.
+* **Focused**
+  * Exclusively supports JavaScript tooling.
+  * Streamlined CLI API.
+
 
 ## CLI Commands
 
