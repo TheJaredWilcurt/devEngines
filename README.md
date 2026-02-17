@@ -6,10 +6,10 @@
 
 # devEngines CLI
 
-This tool, devEngines CLI, makes it impossible for you to be on the wrong Node or npm version. With it installed, any time you are in a project that has the Node or npm version defined in the `package.json`, it will switch to that version automatically. You never have to run any commands, just set the value in the official "[devEngines](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#devengines)" part of the `package.json`. This location is defined in the official `package.json` specification. If you want to pin a specific version number, or update to the latest version of a tool, the `devEngines` CLI offers the following commands.
+JavaScript tooling management.
 
 * **Standards compliant**
-  * Uses the official "devEngines" standard in the `package.json`.
+  * Uses the official "[devEngines](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#devengines)" standard in the `package.json`.
     * *Used by npm, pnpm, corepack, etc.*
 * **Cross-Platform**
   * Works the same for everyone on your team.
@@ -30,29 +30,33 @@ This tool, devEngines CLI, makes it impossible for you to be on the wrong Node o
 
 ## CLI Commands
 
-1. `devEngines lts`
-   * Update all tools listed in the `devEngines` of the local `package.json to a resolved exact version of the most recent LTS release, or latest release if the tool does not have an LTS version.
-1. `devEngines latest`
-   * Updates the tools listed in the `devEngines` to a resolved exact version of the latest releases
-1. Pin tool to a resolved version
-   * **Syntax:** `devEngines [toolname]@[version]`
-   * **Examples:**
-      * `devEngines node@latest`
-      * `devEngines node@lts`
-      * `devEngines node@24`
-      * `devEngines node@24.0.0`
-      * `devEngines npm@latest`
-      * `devEngines npm@11`
-      * `devEngines npm@11.0.0`
-1. Use any of the following to set a global fallback to use if `devEngines` are not defined in the local `package.json`, or there is no `package.json` to be found.
-   * `devEngines -g latest`
-   * `devEngines -g node@latest`
-   * `devEngines -g node@lts`
-   * `devEngines -g node@24`
-   * `devEngines -g node@24.0.0`
-   * `devEngines -g npm@latest`
-1. Delete all cached tool (Node/npm) versions
-   * `devEngines purge`
+* `devEngines lts`
+  * Update all tools listed in the `devEngines` of the local `package.json to a resolved exact version of the most recent LTS release, or latest release if the tool does not have an LTS version.
+* `devEngines latest`
+  * Updates the tools listed in the `devEngines` to a resolved exact version of the latest releases
+* Pin tool to a resolved version
+  * **Syntax:** `devEngines [toolname]@[version]`
+  * **Examples:**
+    * `devEngines node@latest`
+    * `devEngines node@lts`
+    * `devEngines node@24`
+    * `devEngines node@24.0.0`
+    * `devEngines npm@latest`
+    * `devEngines npm@11`
+    * `devEngines npm@11.0.0`
+* Use any of the following to set a global fallback to use if `devEngines` are not defined in the local `package.json`, or there is no `package.json` to be found.
+  * `devEngines -g latest`
+  * `devEngines -g node@latest`
+  * `devEngines -g node@lts`
+  * `devEngines -g node@24`
+  * `devEngines -g node@24.0.0`
+  * `devEngines -g npm@latest`
+* Delete all cached tool (Node/npm) versions
+  * `devEngines purge`
+* CLI version
+  * `devEngines -v`
+* Help menu
+  * `devEngines --help`
 
 Anyone on your team that is not using the devEngines CLI tool, will be forced to manually change their Node/npm versions, because the `npm` executable will throw an error if the version used does not match what is defined in the "devEngines" part of the `package.json`.
 
