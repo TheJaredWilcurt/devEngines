@@ -66,8 +66,8 @@ Anyone on your team that is not using the devEngines CLI tool, will be forced to
 
 1. Before installation, remove Node and npm if they are globally installed. Also remove any existing Node version management tools (nvm, n, nodist, nvm-windows, volta, proto, etc).
 1. In a command prompt or terminal change to the user profile home directory:
-  * **Windows:** `cd %USERPROFILE%`
-  * **Linux/OSX:** `cd ~`
+   * **Windows:** `cd %USERPROFILE%`
+   * **Linux/OSX:** `cd ~`
 1. Clone the repo with one of these commands:
    * **HTTPS:** `git clone https://github.com/TheJaredWilcurt/devEngines.git`
    * **SSH:** `git@github.com:TheJaredWilcurt/devEngines.git`
@@ -84,12 +84,12 @@ Anyone on your team that is not using the devEngines CLI tool, will be forced to
 ## Usage
 
 1. In your repos, delete any existing Node/npm stored version that are not in the official `"devEngines"` location:
-  * `.nvmrc`
-  * `.node-version`
-  * `mise.toml`
-  * `.prototools`
-  * `volta` object in the `package.json`
-  * etc
+   * `.nvmrc`
+   * `.node-version`
+   * `mise.toml`
+   * `.prototools`
+   * `volta` object in the `package.json`
+   * etc
 1. Run one of the devEngines CLI commands documented above to pin Node/npm to the desired versions.
 1. Any time you want to update the Node or npm versions, you can run the `devEngines lts` command.
 
@@ -97,8 +97,8 @@ Anyone on your team that is not using the devEngines CLI tool, will be forced to
 ## Uninstalling
 
 1. In a command prompt or terminal change to the cloned devEngines repo directory:
-  * **Windows:** `cd %USERPROFILE%\devEngines`
-  * **Linux/OSX:** `cd ~/devEngines`
+   * **Windows:** `cd %USERPROFILE%\devEngines`
+   * **Linux/OSX:** `cd ~/devEngines`
 1. Uninstall
    * **Windows:** `uninstall.bat`
    * **Linux/OSX:** `./uninstall.sh`
