@@ -1,6 +1,9 @@
 import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vitest/config';
+import {
+  configDefaults,
+  defineConfig
+} from 'vitest/config';
 
 export default defineConfig({
   resolve: {
@@ -11,6 +14,9 @@ export default defineConfig({
   },
   test: {
     coverage: {
+      include: [
+        './src/**/*'
+      ],
       reportsDirectory: './tests/unit/coverage'
     },
     globals: true,
