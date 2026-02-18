@@ -1,6 +1,6 @@
-import { HELP_MENU } from '@@/data/constants.js';
-
 import { showHelpMenu } from '@/helpMenu.js';
+
+import { HELP_MENU } from '@@/data/constants.js';
 
 describe('helpMenu.js', () => {
   describe('showHelpMenu', () => {

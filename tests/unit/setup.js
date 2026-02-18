@@ -1,4 +1,7 @@
-// Global Vitest setup file
+/**
+ * @file Global Vitest setup file
+ */
+
 
 let consoleLog = console.log;
 

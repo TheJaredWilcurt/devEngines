@@ -1,4 +1,8 @@
 /**
+ * @file Process command line arguments passed in by the user.
+ */
+
+/**
  * Forces user arguments to lowercase strings.
  *
  * @param  {string} argument  Argument provided by the user, or undefined
@@ -6,12 +10,12 @@
  */
 const cleanArgument = function (argument) {
   return argument?.toLowerCase() || '';
-}
+};
 
 /**
- * @typedef {object}  PROCESSEDARGS
- * @param   {boolean} isGlobal       Did they use -g
- * @param   {string}  arg            The first non -g argument
+ * @typedef  {object}  PROCESSEDARGS
+ * @property {boolean} isGlobal       Did they use -g
+ * @property {string}  arg            The first non -g argument
  */
 
 /**
@@ -42,4 +46,4 @@ export const argumentProcessing = function () {
     arg,
     isGlobal
   };
-}
+};

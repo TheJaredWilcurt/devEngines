@@ -1,3 +1,7 @@
+/**
+ * @file Outputs the devEngines CLI version number.
+ */
+
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 

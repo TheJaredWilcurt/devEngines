@@ -1,6 +1,6 @@
-import { CLI_VERSION } from '@@/data/constants.js';
-
 import { getCliVersion } from '@/cliVersion.js';
+
+import { CLI_VERSION } from '@@/data/constants.js';
 
 describe('cliVersion.js', () => {
   describe('getCliVersion', () => {

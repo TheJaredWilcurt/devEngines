@@ -1,11 +1,13 @@
+/**
+ * @file Vitest Configuration
+ */
+
 import { fileURLToPath, URL } from 'node:url';
 
-import {
-  configDefaults,
-  defineConfig
-} from 'vitest/config';
+/* eslint-disable-next-line import/extensions,import/no-unresolved */
+import { defineConfig } from 'vitest/config';
 
-export default defineConfig({
+const config = defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -26,3 +28,6 @@ export default defineConfig({
     ]
   }
 });
+
+/* eslint-disable-next-line import/no-unused-modules */
+export default config;

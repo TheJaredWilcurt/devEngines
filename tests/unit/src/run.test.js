@@ -1,6 +1,6 @@
-import { CLI_VERSION, HELP_MENU } from '@@/data/constants.js';
-
 import { run, updateAllTools } from '@/run.js';
+
+import { CLI_VERSION, HELP_MENU } from '@@/data/constants.js';
 
 describe('run.js', () => {
   describe('run', () => {
@@ -23,28 +23,28 @@ describe('run.js', () => {
     describe('Version number', () => {
       const version = 'devEngines ' + CLI_VERSION;
 
-      test('--version', () => {
+      test('Argument --version', () => {
         run(false, '--version');
 
         expect(console.log)
           .toHaveBeenCalledWith(version);
       });
 
-      test('-v', () => {
+      test('Argument -v', () => {
         run(false, '-v');
 
         expect(console.log)
           .toHaveBeenCalledWith(version);
       });
 
-      test('v', () => {
+      test('Argument v', () => {
         run(false, 'v');
 
         expect(console.log)
           .toHaveBeenCalledWith(version);
       });
 
-      test('version', () => {
+      test('Argument version', () => {
         run(false, 'version');
 
         expect(console.log)
@@ -69,14 +69,14 @@ describe('run.js', () => {
     });
 
     describe('Update Node', () => {
-      test('devEngines node@latest', () => {
+      test('Run devEngines node@latest', () => {
         run(false, 'node@latest');
 
         expect(console.log)
           .toHaveBeenCalledWith('Pin local Node to latest');
       });
 
-      test('devEngines node@', () => {
+      test('Run devEngines node@', () => {
         run(false, 'node@');
 
         expect(console.log)
@@ -90,14 +90,14 @@ describe('run.js', () => {
     });
 
     describe('Update npm', () => {
-      test('devEngines npm@latest', () => {
+      test('Run devEngines npm@latest', () => {
         run(false, 'npm@latest');
 
         expect(console.log)
           .toHaveBeenCalledWith('Pin local npm to latest');
       });
 
-      test('devEngines npm@', () => {
+      test('Run devEngines npm@', () => {
         run(false, 'npm@');
 
         expect(console.log)

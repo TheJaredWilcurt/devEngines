@@ -1,3 +1,7 @@
+/**
+ * @file Reusable test constants
+ */
+
 export const CLI_VERSION = 'v0.0.1';
 export const HELP_MENU = [
   'devEngines CLI ' + CLI_VERSION,

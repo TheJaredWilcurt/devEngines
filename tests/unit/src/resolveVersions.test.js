@@ -7,13 +7,13 @@ import { join } from 'node:path';
 
 import axios from 'axios';
 
-import { error } from '@@/data/error.js';
-
 import {
   downloadAndCacheAllNodeVersions,
   loadAllNodeVersionsFromCache,
   resolveNodeVersion
 } from '@/resolveVersions.js';
+
+import { error } from '@@/data/error.js';
 
 const __dirname = import.meta.dirname;
 const nodeVersionsPath = join(__dirname, '..', '..', '..', 'nodeVersions.json');
@@ -100,7 +100,7 @@ describe('resolveVersions.js', () => {
     });
 
     afterEach(() => {
-      axios.get = axiosGet
+      axios.get = axiosGet;
     });
 
     test('Returns the value if it is already exact', async () => {
@@ -114,32 +114,32 @@ describe('resolveVersions.js', () => {
       const result = await resolveNodeVersion('latest');
 
       expect(result)
-        .toMatchInlineSnapshot(`"25.6.1"`);
+        .toMatchInlineSnapshot('"25.6.1"');
     });
 
     test('Returns the LTS Node version', async () => {
       const result = await resolveNodeVersion('lts');
 
       expect(result)
-        .toMatchInlineSnapshot(`"24.13.1"`);
+        .toMatchInlineSnapshot('"24.13.1"');
     });
 
     test('Returns the latest Node version 22', async () => {
       const result = await resolveNodeVersion('22.x.x');
 
       expect(result)
-        .toMatchInlineSnapshot(`"22.22.0"`);
+        .toMatchInlineSnapshot('"22.22.0"');
     });
 
     test('Console logs error if Node version cannot be satisfied', async () => {
-      const result = await resolveNodeVersion('9001.x.x');
+      await resolveNodeVersion('9001.x.x');
 
       expect(console.log)
         .toHaveBeenCalledWith('Desired Node version cannot be found.');
     });
 
     test('Console logs error for invalid Node version', async () => {
-      const result = await resolveNodeVersion('asdf');
+      await resolveNodeVersion('asdf');
 
       expect(console.log)
         .toHaveBeenCalledWith('Desired Node version cannot be found.');

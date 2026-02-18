@@ -1,3 +1,7 @@
+/**
+ * @file Helper functions regarding package.json files.
+ */
+
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -37,13 +41,13 @@ export const findManifest = function (cwd, attempt) {
   ) {
     return '';
   }
-  return findManifest(newCwd, attempt - 1)
+  return findManifest(newCwd, attempt - 1);
 };
 
 /**
- * @typedef {object} GLOBALTOOLS
- * @param   {string} [node]       The global Node version, if set
- * @param   {string} [npm]        The global npm version, if set
+ * @typedef  {object} GLOBALTOOLS
+ * @property {string} [node]       The global Node version, if set
+ * @property {string} [npm]        The global npm version, if set
  */
 
 /**
@@ -78,6 +82,12 @@ export const getGlobalToolVersions = function () {
   return {};
 };
 
+/**
+ * Finds, parses, and returns the closest package.json
+ * to the current working directory.
+ *
+ * @return {object} The package.json as an object
+ */
 export const getManifest = function () {
   const manifestPath = findManifest();
   if (!manifestPath) {
@@ -93,24 +103,45 @@ export const getManifest = function () {
   return manifest;
 };
 
+/**
+ * @typedef  {object} RAWVERSIONS
+ * @property {string} [node]       The raw Node.js version
+ * @property {string} [deno]       The raw Deno version
+ * @property {string} [bun]        The raw Bun version
+ * @property {string} [npm]        The raw npm version
+ * @property {string} [pnpm]       The raw pnpm version
+ * @property {string} [yarn]       The raw Yarn version
+ */
+
+/**
+ * Returns the tool versions as defined in the devEngines,
+ * to be validated and resolved later.
+ *
+ * @return {RAWVERSIONS} Simplified object of raw tool versions.
+ */
 export const getRawToolVersions = function () {
   const manifest = getManifest();
   let versions = {};
-  if (
-    manifest?.devEngines?.runtime &&
-    !Array.isArray(manifest.devEngines.runtime) &&
-    manifest.devEngines.runtime?.name &&
-    manifest.devEngines.runtime?.version
-  ) {
-    versions[manifest.devEngines.runtime.name] = manifest.devEngines.runtime.version;
+  function setVersionForDevEngine (type) {
+    if (
+      manifest?.devEngines &&
+      manifest.devEngines[type]
+    ) {
+      if (Array.isArray(manifest.devEngines[type])) {
+        manifest.devEngines[type].forEach((tool) => {
+          if (tool?.name && tool?.version) {
+            versions[tool.name.toLowerCase()] = tool.version;
+          }
+        });
+      } else if (
+        manifest.devEngines[type].name &&
+        manifest.devEngines[type].version
+      ) {
+        versions[manifest.devEngines[type].name.toLowerCase()] = manifest.devEngines[type].version;
+      }
+    }
   }
-  if (
-    manifest?.devEngines?.packageManager &&
-    !Array.isArray(manifest.devEngines.packageManager) &&
-    manifest.devEngines.packageManager?.name &&
-    manifest.devEngines.packageManager?.version
-  ) {
-    versions[manifest.devEngines.packageManager.name] = manifest.devEngines.packageManager.version;
-  }
+  setVersionForDevEngine('runtime');
+  setVersionForDevEngine('packageManager');
   return versions;
 };

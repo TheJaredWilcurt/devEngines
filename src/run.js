@@ -1,3 +1,7 @@
+/**
+ * @file The core logic execution of the devEngines CLI tool.
+ */
+
 import { getCliVersion } from './cliVersion.js';
 import { showHelpMenu } from './helpMenu.js';
 
@@ -18,15 +22,21 @@ const updateTool = function (tool, arg) {
   } else {
     console.log('Pin local ' + tool + ' to ' + arg.split('@')[1]);
   }
-}
+};
 
+/**
+ * Updates both Node and npm to Latest or LTS version
+ * in the local package.json.
+ *
+ * @param {string} arg  User argument
+ */
 export const updateAllTools = function (arg) {
   if (arg === 'lts') {
     console.log('Pin local to LTS');
   } else if (arg === 'latest') {
     console.log('Pin local to latest');
   }
-}
+};
 
 /**
  * Runs the core logic of the CLI.
@@ -53,4 +63,4 @@ export const run = function (isGlobal, arg) {
   } else {
     showHelpMenu();
   }
-}
+};

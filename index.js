@@ -1,5 +1,9 @@
-import { argumentProcessing } from './src/processArguments.js';
+/**
+ * @file devEngines CLI entry point.
+ */
+
 import { showHelpMenu } from './src/helpMenu.js';
+import { argumentProcessing } from './src/processArguments.js';
 import { run } from './src/run.js';
 
 /**

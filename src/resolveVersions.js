@@ -1,3 +1,7 @@
+/**
+ * @file Handles tool version resolution to exact versions.
+ */
+
 import {
   existsSync,
   readFileSync,
@@ -16,6 +20,20 @@ const __dirname = import.meta.dirname;
 
 const nodeVersionsPath = join(__dirname, '..', 'nodeVersions.json');
 
+/**
+ * @typedef  {object}   NODERELEASE
+ * @property {string}   version      The Node.js version ('25.6.1')
+ * @property {string}   date         Node release publish date ('2026-02-09')
+ * @property {string[]} files        Names of the published files for this Node release
+ * @property {string}   npm          The npm version shipped with this Node release
+ * @property {boolean}  lts          If this was a Long Term Support (LTS) release
+ */
+
+/**
+ * Reads/Parses/returns the nodeVersions.json file.
+ *
+ * @return {NODERELEASE[]} List of node releases, or undefined
+ */
 export const loadAllNodeVersionsFromCache = function () {
   let nodeVersionsExist = false;
   try {
@@ -35,6 +53,13 @@ export const loadAllNodeVersionsFromCache = function () {
   return data;
 };
 
+/**
+ * Loads the cached nodeVersions.json file, checks if it was cached in the
+ * last 10 seconds and if so, returns it. Otherwise downloads the latest
+ * version and updates the nodeVersions.json cache.
+ *
+ * @return {NODERELEASE[]} List of node releases, or undefined
+ */
 export const downloadAndCacheAllNodeVersions = async function () {
   const nodeVersionsUrl = 'https://nodejs.org/download/release/index.json';
   let data = loadAllNodeVersionsFromCache();
@@ -108,4 +133,4 @@ export const resolveNodeVersion = async function (version) {
   }
 
   console.log('Desired Node version cannot be found.');
-}
+};

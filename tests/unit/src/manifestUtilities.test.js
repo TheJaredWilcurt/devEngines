@@ -110,7 +110,7 @@ describe('manifestUtilities.js', () => {
   });
 
   describe('getRawToolVersions', () => {
-    test('Returns versions', () => {
+    test('Returns common versions', () => {
       process.chdir(join(__dirname, '..', '..', 'data', 'dummyNodeNpmVersions'));
 
       expect(getRawToolVersions())
@@ -120,7 +120,28 @@ describe('manifestUtilities.js', () => {
         });
     });
 
-    test('Returns empty object', () => {
+    test('Returns array versions', () => {
+      process.chdir(join(__dirname, '..', '..', 'data', 'dummyNodeNpmArrayVersions'));
+
+      expect(getRawToolVersions())
+        .toEqual({
+          node: '25.0.0',
+          deno: '2.0.0',
+          bun: '1.0.0',
+          npm: '11.0.0',
+          pnpm: '3.0.0',
+          yarn: '2.0.0'
+        });
+    });
+
+    test('Returns empty object when devEngines missing', () => {
+      process.chdir(join(__dirname, '..', '..', 'data', 'dummyNoDevEngines'));
+
+      expect(getRawToolVersions())
+        .toEqual({});
+    });
+
+    test('Returns empty object when no versions defined', () => {
       process.chdir(join(__dirname, '..', '..', 'data', 'dummyNoVersions'));
 
       expect(getRawToolVersions())

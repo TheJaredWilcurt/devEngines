@@ -1,3 +1,7 @@
+/**
+ * @file Displays the help menu in the devEngines CLI.
+ */
+
 import { getCliVersion } from './cliVersion.js';
 
 /**
@@ -38,4 +42,4 @@ export const showHelpMenu = function () {
     'Get the devEngines CLI version',
     '  devEngines -v'
   ].join('\n'));
-}
+};
