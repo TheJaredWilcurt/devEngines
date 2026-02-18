@@ -8,6 +8,7 @@
     "test": "vitest run --coverage",
     "unit": "vitest --coverage",
     "lint": "eslint *.js src tests",
+    "fix": "npm run lint -- --fix",
     "outdated": "npm outdated"
   },
   "dependencies": {
@@ -26,7 +27,7 @@
     "eslint-import-resolver-vite": "^2.1.0",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^29.15.0",
-    "eslint-plugin-jsdoc": "^62.5.5",
+    "eslint-plugin-jsdoc": "^62.6.0",
     "globals": "^17.3.0",
     "vitest": "^4.0.18"
   },
