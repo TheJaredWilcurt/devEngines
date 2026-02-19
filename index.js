@@ -11,8 +11,8 @@ import { run } from './src/run.js';
  * the first non-global argument.
  */
 const {
-  isGlobal,
-  arg
+  arg,
+  isGlobal
 } = argumentProcessing();
 
 if (arg) {

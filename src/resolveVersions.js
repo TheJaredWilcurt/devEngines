@@ -2,6 +2,7 @@
  * @file Handles tool version resolution to exact versions.
  */
 
+import { execSync } from 'node:child_process';
 import {
   existsSync,
   readFileSync,
@@ -18,7 +19,8 @@ import {
 
 const __dirname = import.meta.dirname;
 
-const nodeVersionsPath = join(__dirname, '..', 'nodeVersions.json');
+const nodeVersionsPath = join(__dirname, '..', 'cacheLists', 'nodeVersions.json');
+const npmVersionsPath = join(__dirname, '..', 'cacheLists', 'npmVersions.json');
 
 /**
  * @typedef  {object}   NODERELEASE
@@ -30,21 +32,40 @@ const nodeVersionsPath = join(__dirname, '..', 'nodeVersions.json');
  */
 
 /**
- * Reads/Parses/returns the nodeVersions.json file.
- *
- * @return {NODERELEASE[]} List of node releases, or undefined
+ * @typedef  {object}   CACHEDDATA
+ * @property {number}   date        The timestamp of when the data was last cached
+ * @property {object[]} data        The cached data
  */
-export const loadAllNodeVersionsFromCache = function () {
-  let nodeVersionsExist = false;
+
+/**
+ * @typedef  {object}        NODERELEASES
+ * @property {number}        date          The timestamp of when the data was last cached
+ * @property {NODERELEASE[]} data          Array of Node.js release objects
+ */
+
+/**
+ * @typedef  {object}   NPMRELEASES
+ * @property {number}   date         The timestamp of when the data was last cached
+ * @property {string[]} data         Array of npm version numbers
+ */
+
+/**
+ * Checks if the file exists, reads it, returns it as parsed JSON.
+ *
+ * @param  {string}     filePath  The location of the JSON file to load
+ * @return {CACHEDDATA}           The loaded data
+ */
+const loadJsonFile = function (filePath) {
+  let fileExists = false;
   try {
-    nodeVersionsExist = existsSync(nodeVersionsPath);
+    fileExists = existsSync(filePath);
   } catch {
     // do nothing
   }
   let data;
-  if (nodeVersionsExist) {
+  if (fileExists) {
     try {
-      const contents = readFileSync(nodeVersionsPath);
+      const contents = readFileSync(filePath);
       data = JSON.parse(contents);
     } catch {
       // do nothing
@@ -53,27 +74,47 @@ export const loadAllNodeVersionsFromCache = function () {
   return data;
 };
 
+
+/**
+ * Reads/Parses/returns the nodeVersions.json file.
+ *
+ * @return {NODERELEASES} List of node releases with timestamp
+ */
+export const loadAllNodeReleasesFromCache = function () {
+  return loadJsonFile(nodeVersionsPath);
+};
+
+/**
+ * Reads/Parses/returns the nodeVersions.json file.
+ *
+ * @return {NPMRELEASES} List of npm versions with timestamp
+ */
+export const loadAllNpmVersionsFromCache = function () {
+  return loadJsonFile(npmVersionsPath);;
+};
+
 /**
  * Loads the cached nodeVersions.json file, checks if it was cached in the
  * last 10 seconds and if so, returns it. Otherwise downloads the latest
  * version and updates the nodeVersions.json cache.
  *
- * @return {NODERELEASE[]} List of node releases, or undefined
+ * @return {NODERELEASES} List of node releases (or undefined) and a timestamp
  */
-export const downloadAndCacheAllNodeVersions = async function () {
+export const downloadAndCacheAllNodeReleases = async function () {
   const nodeVersionsUrl = 'https://nodejs.org/download/release/index.json';
-  let data = loadAllNodeVersionsFromCache();
-  if (data?.length) {
-    const timeStamp = data[data.length - 1].date;
+  let cache = loadAllNodeReleasesFromCache();
+  let contents = cache;
+  if (cache?.data?.length) {
+    const timeStamp = cache.date;
     const now = (new Date()).getTime();
     const TEN_SECONDS = 10 * 1000;
     if (now - timeStamp < TEN_SECONDS) {
-      return data;
+      return cache;
     }
   }
   try {
     const response = await axios.get(nodeVersionsUrl);
-    data = response.data.map((release) => {
+    const data = response.data.map((release) => {
       return {
         version: release.version.replace('v', ''),
         date: release.date,
@@ -82,21 +123,57 @@ export const downloadAndCacheAllNodeVersions = async function () {
         lts: release.lts
       };
     });
-    // Store the timestamp of the last download of this list
-    data.push({
-      version: '',
+    contents = {
       date: (new Date()).getTime(),
-      files: [],
-      npm: '',
-      lts: false
-    });
-    const contents = JSON.stringify(data, null, 2) + '\n';
-    writeFileSync(nodeVersionsPath, contents);
+      data
+    };
+    const fileContents = JSON.stringify(contents, null, 2) + '\n';
+    writeFileSync(nodeVersionsPath, fileContents);
   } catch (error) {
-    console.log('Error checking for latest Node/npm releases');
+    console.log('Error checking for latest Node releases');
     console.log(error);
   }
-  return data;
+  return contents;
+};
+
+/**
+ * Loads the cached nodeVersions.json file, checks if it was cached in the
+ * last 10 seconds and if so, returns it. Otherwise downloads the latest
+ * version and updates the nodeVersions.json cache.
+ *
+ * @return {NPMRELEASES} List of npm versions and a timestamp
+ */
+export const downloadAndCacheAllNpmReleases = function () {
+  let cache = loadAllNpmVersionsFromCache();
+  let contents = cache;
+  if (cache?.data?.length) {
+    const timeStamp = cache.date;
+    const now = (new Date()).getTime();
+    const TEN_SECONDS = 10 * 1000;
+    if (now - timeStamp < TEN_SECONDS) {
+      return cache;
+    }
+  }
+
+  try {
+    let versions = execSync('npm view npm versions');
+    versions = String(versions);
+    versions = versions.replaceAll('\'', '"');
+    versions = JSON.parse(versions);
+    versions = versions.reverse();
+    if (versions?.length) {
+      contents = {
+        date: (new Date()).getTime(),
+        data: versions
+      };
+    }
+    const fileContents = JSON.stringify(contents, null, 2) + '\n';
+    writeFileSync(npmVersionsPath, fileContents);
+  } catch (error) {
+    console.log('Error checking for latest npm releases');
+    console.log(error);
+  }
+  return contents;
 };
 
 /**
@@ -106,25 +183,31 @@ export const downloadAndCacheAllNodeVersions = async function () {
  * @return {string}          An exact version number (`24.1.0`)
  */
 export const resolveNodeVersion = async function (version) {
-  // Anything other than an exact version returns null
-  if (valid(version)) {
-    return version;
-  }
-
-  const nodeVersions = await downloadAndCacheAllNodeVersions();
+  const nodeReleases = await downloadAndCacheAllNodeReleases();
+  const nodeVersions = nodeReleases?.data?.map((release) => {
+    return release.version;
+  });
 
   if (version === 'latest') {
-    return nodeVersions[0].version;
+    return nodeVersions[0];
   }
 
   if (version === 'lts') {
-    return nodeVersions.find((release) => {
+    return nodeReleases?.data?.find((release) => {
       return release.lts;
     }).version;
   }
 
+  if (
+    // Anything other than an exact version returns null
+    valid(version) &&
+    nodeVersions.includes(version)
+  ) {
+    return version;
+  }
+
   if (validRange(version)) {
-    const latestInRange = nodeVersions.find((release) => {
+    const latestInRange = nodeReleases?.data?.find((release) => {
       return satisfies(release.version, version);
     });
     if (latestInRange?.version) {
@@ -133,4 +216,44 @@ export const resolveNodeVersion = async function (version) {
   }
 
   console.log('Desired Node version cannot be found.');
+};
+
+/**
+ * Finds an exact version number based on the desired version passed in.
+ *
+ * @param  {string} version  A version (`9`, `>=9.0.0`, `lts`, etc)
+ * @return {string}          An exact version number (`9.9.4`)
+ */
+export const resolveNpmVersion = function (version) {
+  const npmReleases = downloadAndCacheAllNpmReleases();
+  const npmVersions = npmReleases.data;
+
+  if (version === 'latest') {
+    return npmVersions[0];
+  }
+
+  if (version === 'lts') {
+    return npmVersions.filter((version) => {
+      return !version.includes('-');
+    })[0];
+  }
+
+  if (
+    // Anything other than an exact version returns null
+    valid(version) &&
+    npmVersions.includes(version)
+  ) {
+    return version;
+  }
+
+  if (validRange(version)) {
+    const latestInRange = npmVersions?.data?.find((release) => {
+      return satisfies(release, version);
+    });
+    if (latestInRange) {
+      return latestInRange;
+    }
+  }
+
+  return undefined;
 };

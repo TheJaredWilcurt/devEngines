@@ -8,44 +8,41 @@ import { join } from 'node:path';
 import axios from 'axios';
 
 import {
-  downloadAndCacheAllNodeVersions,
-  loadAllNodeVersionsFromCache,
+  downloadAndCacheAllNodeReleases,
+  loadAllNodeReleasesFromCache,
   resolveNodeVersion
 } from '@/resolveVersions.js';
 
 import { error } from '@@/data/error.js';
 
 const __dirname = import.meta.dirname;
-const nodeVersionsPath = join(__dirname, '..', '..', '..', 'nodeVersions.json');
+const nodeVersionsPath = join(__dirname, '..', '..', '..', 'cacheLists', 'nodeVersions.json');
 let allNodeVersions;
 
 describe('resolveVersions.js', () => {
-  describe('downloadAndCacheAllNodeVersions', () => {
+  describe('downloadAndCacheAllNodeReleases', () => {
     test('Network call fails', async () => {
-      if (existsSync(nodeVersionsPath)) {
-        allNodeVersions = JSON.parse(readFileSync(nodeVersionsPath));
-      }
-
       const axiosGet = axios.get;
       axios.get = vi.fn(() => Promise.reject(error));
 
-      const data = await downloadAndCacheAllNodeVersions();
-      axios.get = axiosGet;
+      if (existsSync(nodeVersionsPath)) {
+        allNodeVersions = JSON.parse(readFileSync(nodeVersionsPath));
+      }
+      const releases = await downloadAndCacheAllNodeReleases();
 
-      expect(readFileSync(nodeVersionsPath).length > 100)
+      expect(releases.data.length > 100)
         .toEqual(true);
 
-      expect(data.length > 100)
-        .toEqual(true);
-
-      expect(data.length)
-        .toEqual(allNodeVersions.length);
+      expect(releases.data.length)
+        .toEqual(allNodeVersions.data.length);
 
       expect(console.log)
-        .toHaveBeenCalledWith('Error checking for latest Node/npm releases');
+        .toHaveBeenCalledWith('Error checking for latest Node releases');
 
       expect(console.log)
         .toHaveBeenCalledWith(error);
+
+      axios.get = axiosGet;
     });
 
     test('Updates the nodeVersions.json file', async () => {
@@ -53,16 +50,16 @@ describe('resolveVersions.js', () => {
         unlinkSync(nodeVersionsPath);
       }
 
-      const data = await downloadAndCacheAllNodeVersions();
+      const releases = await downloadAndCacheAllNodeReleases();
 
       expect(readFileSync(nodeVersionsPath).length > 100)
         .toEqual(true);
 
-      expect(data.length > 100)
+      expect(releases.data.length > 100)
         .toEqual(true);
 
-      expect(data.length)
-        .toEqual(allNodeVersions.length);
+      expect(releases.data.length)
+        .toEqual(allNodeVersions.data.length);
 
       expect(console.log)
         .not.toHaveBeenCalled();
@@ -72,7 +69,7 @@ describe('resolveVersions.js', () => {
       const axiosGet = axios.get;
       axios.get = vi.fn();
 
-      await downloadAndCacheAllNodeVersions();
+      await downloadAndCacheAllNodeReleases();
 
       expect(axios.get)
         .not.toHaveBeenCalled();
@@ -81,14 +78,14 @@ describe('resolveVersions.js', () => {
     });
   });
 
-  describe('loadAllNodeVersionsFromCache', () => {
+  describe('loadAllNodeReleasesFromCache', () => {
     test('Loads contents', () => {
       if (existsSync(nodeVersionsPath)) {
         allNodeVersions = JSON.parse(readFileSync(nodeVersionsPath));
       }
 
-      expect(loadAllNodeVersionsFromCache())
-        .toEqual(allNodeVersions);
+      expect(loadAllNodeReleasesFromCache().data)
+        .toEqual(allNodeVersions.data);
     });
   });
 

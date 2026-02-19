@@ -9,6 +9,7 @@
     "unit": "vitest --coverage",
     "lint": "eslint *.js src tests",
     "fix": "npm run lint -- --fix",
+    "update-lists": "node ./scripts/updateCacheLists.js",
     "outdated": "npm outdated"
   },
   "dependencies": {
