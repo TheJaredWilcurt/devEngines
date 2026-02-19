@@ -9,15 +9,20 @@ import axios from 'axios';
 
 import {
   downloadAndCacheAllNodeReleases,
+  downloadAndCacheAllNpmReleases,
   loadAllNodeReleasesFromCache,
-  resolveNodeVersion
+  loadAllNpmVersionsFromCache,
+  resolveNodeVersion,
+  resolveNpmVersion
 } from '@/resolveVersions.js';
 
 import { error } from '@@/data/error.js';
 
 const __dirname = import.meta.dirname;
 const nodeVersionsPath = join(__dirname, '..', '..', '..', 'cacheLists', 'nodeVersions.json');
+const npmVersionsPath = join(__dirname, '..', '..', '..', 'cacheLists', 'npmVersions.json');
 let allNodeVersions;
+let allNpmVersions;
 
 describe('resolveVersions.js', () => {
   describe('downloadAndCacheAllNodeReleases', () => {
@@ -78,6 +83,41 @@ describe('resolveVersions.js', () => {
     });
   });
 
+  describe('downloadAndCacheAllNpmReleases', () => {
+    test('Updates the npmVersions.json file', async () => {
+      if (existsSync(npmVersionsPath)) {
+        allNpmVersions = JSON.parse(readFileSync(npmVersionsPath));
+      }
+      if (existsSync(npmVersionsPath)) {
+        unlinkSync(npmVersionsPath);
+      }
+
+      const releases = await downloadAndCacheAllNpmReleases();
+
+      expect(readFileSync(npmVersionsPath).length > 100)
+        .toEqual(true);
+
+      expect(releases.data.length > 100)
+        .toEqual(true);
+
+      expect(releases.data.length)
+        .toEqual(allNpmVersions.data.length);
+
+      expect(console.log)
+        .not.toHaveBeenCalled();
+    });
+
+    test('Running twice in a row uses the cache', async () => {
+      if (existsSync(npmVersionsPath)) {
+        allNpmVersions = JSON.parse(readFileSync(npmVersionsPath));
+      }
+      const releases = await downloadAndCacheAllNpmReleases();
+
+      expect(releases.date)
+        .toEqual(allNpmVersions.date);
+    });
+  });
+
   describe('loadAllNodeReleasesFromCache', () => {
     test('Loads contents', () => {
       if (existsSync(nodeVersionsPath)) {
@@ -86,6 +126,17 @@ describe('resolveVersions.js', () => {
 
       expect(loadAllNodeReleasesFromCache().data)
         .toEqual(allNodeVersions.data);
+    });
+  });
+
+  describe('loadAllNpmVersionsFromCache', () => {
+    test('Loads contents', () => {
+      if (existsSync(npmVersionsPath)) {
+        allNpmVersions = JSON.parse(readFileSync(npmVersionsPath));
+      }
+
+      expect(loadAllNpmVersionsFromCache().data)
+        .toEqual(allNpmVersions.data);
     });
   });
 
@@ -140,6 +191,50 @@ describe('resolveVersions.js', () => {
 
       expect(console.log)
         .toHaveBeenCalledWith('Desired Node version cannot be found.');
+    });
+  });
+
+  describe('resolveNpmVersion', () => {
+    test('Returns the value if it is already exact', async () => {
+      const result = await resolveNpmVersion('11.0.0');
+
+      expect(result)
+        .toEqual('11.0.0');
+    });
+
+    test('Returns the latest npm version', async () => {
+      const result = await resolveNpmVersion('latest');
+
+      expect(result)
+        .toMatchInlineSnapshot('"11.10.0"');
+    });
+
+    test('Returns the LTS npm version', async () => {
+      const result = await resolveNpmVersion('lts');
+
+      expect(result)
+        .toMatchInlineSnapshot('"11.10.0"');
+    });
+
+    test('Returns the latest npm version 9', async () => {
+      const result = await resolveNpmVersion('9.x.x');
+
+      expect(result)
+        .toMatchInlineSnapshot('"9.9.4"');
+    });
+
+    test('Console logs error if npm version cannot be satisfied', async () => {
+      await resolveNpmVersion('9001.x.x');
+
+      expect(console.log)
+        .toHaveBeenCalledWith('Desired npm version cannot be found.');
+    });
+
+    test('Console logs error for invalid npm version', async () => {
+      await resolveNpmVersion('asdf');
+
+      expect(console.log)
+        .toHaveBeenCalledWith('Desired npm version cannot be found.');
     });
   });
 });

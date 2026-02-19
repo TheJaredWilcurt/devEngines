@@ -74,7 +74,6 @@ const loadJsonFile = function (filePath) {
   return data;
 };
 
-
 /**
  * Reads/Parses/returns the nodeVersions.json file.
  *
@@ -221,39 +220,40 @@ export const resolveNodeVersion = async function (version) {
 /**
  * Finds an exact version number based on the desired version passed in.
  *
- * @param  {string} version  A version (`9`, `>=9.0.0`, `lts`, etc)
- * @return {string}          An exact version number (`9.9.4`)
+ * @param  {string} desiredVersion  A version (`9`, `>=9.0.0`, `lts`, etc)
+ * @return {string}                 An exact version number (`9.9.4`)
  */
-export const resolveNpmVersion = function (version) {
+export const resolveNpmVersion = function (desiredVersion) {
   const npmReleases = downloadAndCacheAllNpmReleases();
-  const npmVersions = npmReleases.data;
+  const npmVersions = npmReleases?.data || [];
 
-  if (version === 'latest') {
+  if (desiredVersion === 'latest') {
     return npmVersions[0];
   }
 
-  if (version === 'lts') {
-    return npmVersions.filter((version) => {
-      return !version.includes('-');
+  if (desiredVersion === 'lts') {
+    return npmVersions.filter((desiredVersion) => {
+      return !desiredVersion.includes('-');
     })[0];
   }
 
   if (
     // Anything other than an exact version returns null
-    valid(version) &&
-    npmVersions.includes(version)
+    valid(desiredVersion) &&
+    npmVersions.includes(desiredVersion)
   ) {
-    return version;
+    return desiredVersion;
   }
 
-  if (validRange(version)) {
-    const latestInRange = npmVersions?.data?.find((release) => {
-      return satisfies(release, version);
+  if (validRange(desiredVersion)) {
+    const latestInRange = npmVersions.find((officialVersion) => {
+      return satisfies(officialVersion, desiredVersion);
     });
     if (latestInRange) {
       return latestInRange;
     }
   }
 
+  console.log('Desired npm version cannot be found.');
   return undefined;
 };
