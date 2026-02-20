@@ -1,3 +1,5 @@
+// TODO: Mock out all network calls with dummy data
+// TODO: Mock out filesystem
 import {
   existsSync,
   readFileSync,
@@ -206,14 +208,14 @@ describe('resolveVersions.js', () => {
       const result = await resolveNpmVersion('latest');
 
       expect(result)
-        .toMatchInlineSnapshot('"11.10.0"');
+        .toMatchInlineSnapshot('"11.10.1"');
     });
 
     test('Returns the LTS npm version', async () => {
       const result = await resolveNpmVersion('lts');
 
       expect(result)
-        .toMatchInlineSnapshot('"11.10.0"');
+        .toMatchInlineSnapshot('"11.10.1"');
     });
 
     test('Returns the latest npm version 9', async () => {

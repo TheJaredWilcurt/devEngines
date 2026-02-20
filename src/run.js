@@ -4,6 +4,10 @@
 
 import { getCliVersion } from './cliVersion.js';
 import { showHelpMenu } from './helpMenu.js';
+import {
+  resolveNodeVersion,
+  resolveNpmVersion
+} from './resolveVersions.js';
 
 /**
  * Update a tool, like Node or npm.
@@ -11,7 +15,7 @@ import { showHelpMenu } from './helpMenu.js';
  * @param {string} tool  'node' or 'npm'
  * @param {string} arg   User argument
  */
-const updateTool = function (tool, arg) {
+const updateTool = async function (tool, arg) {
   if (!arg.includes('@') || !arg.split('@')[1]) {
     console.log([
       'Missing ' + tool + ' version, try:',
@@ -20,7 +24,14 @@ const updateTool = function (tool, arg) {
       'devEngines ' + tool.toLowerCase() + '@latest'
     ].join('\n'));
   } else {
-    console.log('Pin local ' + tool + ' to ' + arg.split('@')[1]);
+    let toolMap = {
+      Node: resolveNodeVersion,
+      npm: resolveNpmVersion
+    };
+    let desiredVersion = arg.split('@')[1];
+    let resolvedVersion = await toolMap[tool](desiredVersion);
+    console.log('Pin local ' + tool + ' to ' + resolvedVersion);
+    // TODO: Update the version in the package.json:devEngines
   }
 };
 
@@ -30,7 +41,9 @@ const updateTool = function (tool, arg) {
  *
  * @param {string} arg  User argument
  */
-export const updateAllTools = function (arg) {
+export const updateAllTools = async function (arg) {
+  // TODO: look up what tools the package.json:devEngines use
+  // TODO: Update Node and/or npm versions in the package.json:devEngines after resolved
   if (arg === 'lts') {
     console.log('Pin local to LTS');
   } else if (arg === 'latest') {
@@ -44,22 +57,23 @@ export const updateAllTools = function (arg) {
  * @param {boolean} isGlobal  If the user requested a global install with -g
  * @param {string}  arg       The command line argument provided by the user
  */
-export const run = function (isGlobal, arg) {
+export const run = async function (isGlobal, arg) {
   arg = arg || '';
   if (isGlobal) {
     if (!arg) {
       console.log('Missing an argument after -g');
     } else {
+      // TODO: stub
       console.log('Global install of ' + arg);
     }
   } else if (['--version', '-v', 'v', 'version'].includes(arg)) {
     console.log('devEngines ' + getCliVersion());
   } else if (['lts', 'latest'].includes(arg)) {
-    updateAllTools(arg);
+    await updateAllTools(arg);
   } else if (arg.startsWith('node')) {
-    updateTool('Node', arg);
+    await updateTool('Node', arg);
   } else if (arg.startsWith('npm')) {
-    updateTool('npm', arg);
+    await updateTool('npm', arg);
   } else {
     showHelpMenu();
   }

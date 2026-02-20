@@ -21,6 +21,7 @@ const __dirname = import.meta.dirname;
 
 const nodeVersionsPath = join(__dirname, '..', 'cacheLists', 'nodeVersions.json');
 const npmVersionsPath = join(__dirname, '..', 'cacheLists', 'npmVersions.json');
+const TEN_SECONDS = 10 * 1000;
 
 /**
  * @typedef  {object}   NODERELEASE
@@ -106,7 +107,6 @@ export const downloadAndCacheAllNodeReleases = async function () {
   if (cache?.data?.length) {
     const timeStamp = cache.date;
     const now = (new Date()).getTime();
-    const TEN_SECONDS = 10 * 1000;
     if (now - timeStamp < TEN_SECONDS) {
       return cache;
     }
@@ -122,6 +122,7 @@ export const downloadAndCacheAllNodeReleases = async function () {
         lts: release.lts
       };
     });
+    // TODO: If the data is the same as in the cache, don't save a new timestamp
     contents = {
       date: (new Date()).getTime(),
       data
@@ -148,19 +149,21 @@ export const downloadAndCacheAllNpmReleases = function () {
   if (cache?.data?.length) {
     const timeStamp = cache.date;
     const now = (new Date()).getTime();
-    const TEN_SECONDS = 10 * 1000;
     if (now - timeStamp < TEN_SECONDS) {
       return cache;
     }
   }
 
   try {
+    // TODO: Replace with regular network call to more easily mock in tests
+    // TODO: May also need call that returns release download file names
     let versions = execSync('npm view npm versions');
     versions = String(versions);
     versions = versions.replaceAll('\'', '"');
     versions = JSON.parse(versions);
     versions = versions.reverse();
     if (versions?.length) {
+      // TODO: If the data is the same as in the cache, don't save a new timestamp
       contents = {
         date: (new Date()).getTime(),
         data: versions
