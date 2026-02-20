@@ -10,7 +10,7 @@ import {
 
 async function udpateCacheLists () {
   await downloadAndCacheAllNodeReleases();
-  downloadAndCacheAllNpmReleases();
+  await downloadAndCacheAllNpmReleases();
 }
 
 udpateCacheLists();

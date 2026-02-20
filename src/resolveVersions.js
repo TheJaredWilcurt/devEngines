@@ -156,7 +156,7 @@ export const downloadAndCacheAllNpmReleases = function () {
 
   try {
     // TODO: Replace with regular network call to more easily mock in tests
-    // TODO: May also need call that returns release download file names
+    // TODO: May also need URL that returns release download file names
     let versions = execSync('npm view npm versions');
     versions = String(versions);
     versions = versions.replaceAll('\'', '"');
