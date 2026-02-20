@@ -1,5 +1,5 @@
 /**
- * @file Bootstrap script for installing devEngines CLI.
+ * @file Installs devEngines by downloading Node.js and setting up shims.
  */
 /* global Bun */
 
