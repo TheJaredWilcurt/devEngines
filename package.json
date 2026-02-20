@@ -43,10 +43,16 @@
   },
   "homepage": "https://github.com/TheJaredWilcurt/devEngines#readme",
   "devEngines": {
-    "runtime": {
-      "name": "node",
-      "version": "25.6.1"
-    },
+    "runtime": [
+      {
+        "name": "node",
+        "version": "25.6.1"
+      },
+      {
+        "name": "bun",
+        "version": "1.3.9"
+      }
+    ],
     "packageManager": {
       "name": "npm",
       "version": "11.9.0"
