@@ -5,15 +5,15 @@ import { CLI_VERSION, HELP_MENU } from '@@/data/constants.js';
 describe('run.js', () => {
   describe('run', () => {
     describe('Global installs', () => {
-      test('Global without argument', () => {
-        run(true);
+      test('Global without argument', async () => {
+        await run(true);
 
         expect(console.log)
           .toHaveBeenCalledWith('Missing an argument after -g');
       });
 
-      test('Global with argument', () => {
-        run(true, 'node@latest');
+      test('Global with argument', async () => {
+        await run(true, 'node@latest');
 
         expect(console.log)
           .toHaveBeenCalledWith('Global install of node@latest');
@@ -23,29 +23,29 @@ describe('run.js', () => {
     describe('Version number', () => {
       const version = 'devEngines ' + CLI_VERSION;
 
-      test('Argument --version', () => {
-        run(false, '--version');
+      test('Argument --version', async () => {
+        await run(false, '--version');
 
         expect(console.log)
           .toHaveBeenCalledWith(version);
       });
 
-      test('Argument -v', () => {
-        run(false, '-v');
+      test('Argument -v', async () => {
+        await run(false, '-v');
 
         expect(console.log)
           .toHaveBeenCalledWith(version);
       });
 
-      test('Argument v', () => {
-        run(false, 'v');
+      test('Argument v', async () => {
+        await run(false, 'v');
 
         expect(console.log)
           .toHaveBeenCalledWith(version);
       });
 
-      test('Argument version', () => {
-        run(false, 'version');
+      test('Argument version', async () => {
+        await run(false, 'version');
 
         expect(console.log)
           .toHaveBeenCalledWith(version);
@@ -53,15 +53,15 @@ describe('run.js', () => {
     });
 
     describe('Update all tools', () => {
-      test('LTS', () => {
-        run(false, 'lts');
+      test('LTS', async () => {
+        await run(false, 'lts');
 
         expect(console.log)
           .toHaveBeenCalledWith('Pin local to LTS');
       });
 
-      test('Latest', () => {
-        run(false, 'latest');
+      test('Latest', async () => {
+        await run(false, 'latest');
 
         expect(console.log)
           .toHaveBeenCalledWith('Pin local to latest');
@@ -69,15 +69,15 @@ describe('run.js', () => {
     });
 
     describe('Update Node', () => {
-      test('Run devEngines node@latest', () => {
-        run(false, 'node@latest');
+      test('Run devEngines node@latest', async () => {
+        await run(false, 'node@latest');
 
         expect(console.log)
-          .toHaveBeenCalledWith('Pin local Node to latest');
+          .toHaveBeenCalledWith('Pin local Node to 25.6.1');
       });
 
-      test('Run devEngines node@', () => {
-        run(false, 'node@');
+      test('Run devEngines node@', async () => {
+        await run(false, 'node@');
 
         expect(console.log)
           .toHaveBeenCalledWith([
@@ -90,15 +90,15 @@ describe('run.js', () => {
     });
 
     describe('Update npm', () => {
-      test('Run devEngines npm@latest', () => {
-        run(false, 'npm@latest');
+      test('Run devEngines npm@latest', async () => {
+        await run(false, 'npm@latest');
 
         expect(console.log)
-          .toHaveBeenCalledWith('Pin local npm to latest');
+          .toHaveBeenCalledWith('Pin local npm to 11.10.1');
       });
 
-      test('Run devEngines npm@', () => {
-        run(false, 'npm@');
+      test('Run devEngines npm@', async () => {
+        await run(false, 'npm@');
 
         expect(console.log)
           .toHaveBeenCalledWith([
@@ -110,8 +110,8 @@ describe('run.js', () => {
       });
     });
 
-    test('Fallback to help menu', () => {
-      run(false);
+    test('Fallback to help menu', async () => {
+      await run(false);
 
       expect(console.log)
         .toHaveBeenCalledWith(HELP_MENU);

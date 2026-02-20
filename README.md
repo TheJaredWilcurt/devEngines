@@ -11,6 +11,7 @@ JavaScript tooling management.
 * **Standards compliant**
   * Uses the official "[devEngines](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#devengines)" standard in the `package.json`.
     * *Used by npm, pnpm, corepack, etc.*
+  * The `npm` executable will throw an error if the version used does not match what is defined in the "devEngines" part of the `package.json`.
 * **Cross-Platform**
   * Works the same for everyone on your team.
   * One set of setup instructions for everyone.
@@ -32,7 +33,7 @@ JavaScript tooling management.
 ## CLI Commands
 
 * `devEngines lts`
-  * Update all tools listed in the `devEngines` of the local `package.json to a resolved exact version of the most recent LTS release, or latest release if the tool does not have an LTS version.
+  * Update all tools listed in the `devEngines` of the local `package.json` to a resolved exact version of the most recent LTS release, or latest release if the tool does not have an LTS version.
 * `devEngines latest`
   * Updates the tools listed in the `devEngines` to a resolved exact version of the latest releases
 * Pin tool to a resolved version
@@ -47,6 +48,7 @@ JavaScript tooling management.
     * `devEngines npm@11.0.0`
 * Use any of the following to set a global fallback to use if `devEngines` are not defined in the local `package.json`, or there is no `package.json` to be found.
   * `devEngines -g latest`
+  * `devEngines -g lts`
   * `devEngines -g node@latest`
   * `devEngines -g node@lts`
   * `devEngines -g node@24`
@@ -58,8 +60,6 @@ JavaScript tooling management.
   * `devEngines -v`
 * Help menu
   * `devEngines --help`
-
-Anyone on your team that is not using the devEngines CLI tool, will be forced to manually change their Node/npm versions, because the `npm` executable will throw an error if the version used does not match what is defined in the "devEngines" part of the `package.json`.
 
 
 ## Installation:
