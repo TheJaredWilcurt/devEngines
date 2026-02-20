@@ -1,54 +1,54 @@
 {
-  "name": "dev-engines",
-  "type": "module",
-  "version": "0.0.1",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "vitest run --coverage",
-    "unit": "vitest --coverage",
-    "lint": "eslint *.js src tests",
-    "fix": "npm run lint -- --fix",
-    "outdated": "npm outdated"
-  },
-  "dependencies": {
-    "axios": "^1.13.5",
-    "semver": "^7.7.4"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.39.2",
-    "@stylistic/eslint-plugin": "^5.8.0",
-    "@vitest/coverage-v8": "^4.0.18",
-    "eslint": "^9.39.2",
-    "eslint-config-tjw-base": "^4.3.0",
-    "eslint-config-tjw-import": "^2.0.0",
-    "eslint-config-tjw-jest": "^3.0.1",
-    "eslint-config-tjw-jsdoc": "^2.0.1",
-    "eslint-import-resolver-vite": "^2.1.0",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jest": "^29.15.0",
-    "eslint-plugin-jsdoc": "^62.6.0",
-    "globals": "^17.3.0",
-    "vitest": "^4.0.18"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/TheJaredWilcurt/devEngines.git"
-  },
-  "author": "The Jared Wilcurt",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/TheJaredWilcurt/devEngines/issues"
-  },
-  "homepage": "https://github.com/TheJaredWilcurt/devEngines#readme",
-  "devEngines": {
-    "runtime": {
-      "name": "node",
-      "version": "25.6.1"
-    },
-    "packageManager": {
-      "name": "npm",
-      "version": "11.9.0"
-    }
-  }
+	"name": "dev-engines",
+	"type": "module",
+	"version": "0.0.1",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"test": "vitest run --coverage",
+		"unit": "vitest --coverage",
+		"lint": "eslint *.js bootstrap src tests",
+		"fix": "npm run lint -- --fix",
+		"outdated": "npm outdated"
+	},
+	"dependencies": {
+		"axios": "^1.13.5",
+		"semver": "^7.7.4"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.39.2",
+		"@stylistic/eslint-plugin": "^5.8.0",
+		"@vitest/coverage-v8": "^4.0.18",
+		"eslint": "^9.39.2",
+		"eslint-config-tjw-base": "^4.3.0",
+		"eslint-config-tjw-import": "^2.0.0",
+		"eslint-config-tjw-jest": "^3.0.1",
+		"eslint-config-tjw-jsdoc": "^2.0.1",
+		"eslint-import-resolver-vite": "^2.1.0",
+		"eslint-plugin-import": "^2.32.0",
+		"eslint-plugin-jest": "^29.15.0",
+		"eslint-plugin-jsdoc": "^62.6.0",
+		"globals": "^17.3.0",
+		"vitest": "^4.0.18"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/TheJaredWilcurt/devEngines.git"
+	},
+	"author": "The Jared Wilcurt",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/TheJaredWilcurt/devEngines/issues"
+	},
+	"homepage": "https://github.com/TheJaredWilcurt/devEngines#readme",
+	"devEngines": {
+		"runtime": {
+			"name": "node",
+			"version": "25.6.1"
+		},
+		"packageManager": {
+			"name": "npm",
+			"version": "11.9.0"
+		}
+	}
 }
