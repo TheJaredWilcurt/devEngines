@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import {
   findManifest,
   getGlobalToolVersions,
-  getManifest,
+  getManifestData,
   getRawToolVersions
 } from '@/manifestUtilities.js';
 
@@ -88,24 +88,41 @@ describe('manifestUtilities.js', () => {
     });
   });
 
-  describe('getManifest', () => {
+  describe('getManifestData', () => {
     test('Returns the manifest as JSON', () => {
-      const manifest = getManifest();
+      const data = getManifestData();
 
-      expect(typeof(manifest) === 'object')
+      expect(typeof(data) === 'object')
         .toEqual(true);
 
-      expect(manifest.name)
+      expect(data.eol)
+        .toEqual('\n');
+
+      expect(data.indentation)
+        .toEqual(2);
+
+      expect(data.manifestPath)
+        .toEqual('asdf');
+
+      expect(typeof(data.manifest) === 'object')
+        .toEqual(true);
+
+      expect(data.manifest.name)
         .toEqual('dev-engines');
     });
 
     test('Returns empty object if manifest not found', () => {
       process.chdir(join(__dirname, '..', '..', '..', '..'));
 
-      const manifest = getManifest();
+      const data = getManifestData();
 
-      expect(manifest)
-        .toEqual({});
+      expect(data)
+        .toEqual({
+          eol: undefined,
+          indentation: undefined,
+          manifestPath: undefined,
+          manifest: undefined
+        });
     });
   });
 

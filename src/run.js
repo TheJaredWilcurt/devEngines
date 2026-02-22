@@ -4,33 +4,36 @@
 
 import { getCliVersion } from './cliVersion.js';
 import { showHelpMenu } from './helpMenu.js';
+import { supportedTools } from './helpers.js';
 import node from './tools/node.js';
 import npm from './tools/npm.js';
+import unsupported from './tools/unsupportedTool.js';
 
 /**
  * Update a tool, like Node or npm.
  *
- * @param {string} tool  'node' or 'npm'
- * @param {string} arg   User argument
+ * @param {string} tool     'node' or 'npm'
+ * @param {string} version  User argument
  */
-const updateTool = async function (tool, arg) {
-  if (!arg.includes('@') || !arg.split('@')[1]) {
-    console.log([
-      'Missing ' + tool + ' version, try:',
-      'devEngines [toolname]@[version]',
-      'Like this:',
-      'devEngines ' + tool.toLowerCase() + '@latest'
-    ].join('\n'));
-  } else {
-    let toolMap = {
-      Node: node.resolveVersion,
-      npm: npm.resolveVersion
-    };
-    let desiredVersion = arg.split('@')[1];
-    let resolvedVersion = await toolMap[tool](desiredVersion);
-    console.log('Pin local ' + tool + ' to ' + resolvedVersion);
-    // TODO: Update the version in the package.json:devEngines
-  }
+const updateTool = async function (tool, version) {
+  const titleMap = {
+    bun: 'Bun',
+    deno: 'Deno',
+    node: 'Node',
+    npm: 'npm',
+    pnpm: 'PNPM',
+    yarn: 'Yarn'
+  };
+  const titleCase = titleMap[tool] || tool;
+  const toolMap = {
+    node,
+    npm
+  };
+  const toolHelpers = toolMap[tool] || unsupported;
+  let desiredVersion = version;
+  let resolvedVersion = await toolHelpers.resolveVersion(desiredVersion);
+  console.log('Pin local ' + titleCase + ' to ' + resolvedVersion);
+  // TODO: Update the version in the package.json:devEngines
 };
 
 /**
@@ -68,10 +71,12 @@ export const run = async function (isGlobal, arg) {
     console.log('devEngines ' + getCliVersion());
   } else if (['lts', 'latest'].includes(arg)) {
     await updateAllTools(arg);
-  } else if (arg.startsWith('node')) {
-    await updateTool('Node', arg);
-  } else if (arg.startsWith('npm')) {
-    await updateTool('npm', arg);
+  } else if (arg.split('@').length) {
+    let name = arg.split('@')[0];
+    let version = arg.split('@')[1];
+    if (supportedTools.includes(name)) {
+      await updateTool(name, version);
+    }
   } else {
     showHelpMenu();
   }
