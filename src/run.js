@@ -4,10 +4,8 @@
 
 import { getCliVersion } from './cliVersion.js';
 import { showHelpMenu } from './helpMenu.js';
-import {
-  resolveNodeVersion,
-  resolveNpmVersion
-} from './resolveVersions.js';
+import node from './tools/node.js';
+import npm from './tools/npm.js';
 
 /**
  * Update a tool, like Node or npm.
@@ -25,8 +23,8 @@ const updateTool = async function (tool, arg) {
     ].join('\n'));
   } else {
     let toolMap = {
-      Node: resolveNodeVersion,
-      npm: resolveNpmVersion
+      Node: node.resolveVersion,
+      npm: npm.resolveVersion
     };
     let desiredVersion = arg.split('@')[1];
     let resolvedVersion = await toolMap[tool](desiredVersion);
