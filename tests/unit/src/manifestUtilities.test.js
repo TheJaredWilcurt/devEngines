@@ -1,5 +1,5 @@
 import { unlinkSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import {
   findManifest,
@@ -55,14 +55,14 @@ describe('manifestUtilities.js', () => {
       );
 
       expect(findManifest())
-        .toEqual('');
+        .toEqual(undefined);
     });
 
     test('Hits system root', () => {
       process.chdir(join(__dirname, '..', '..', '..', '..'));
 
       expect(findManifest())
-        .toEqual('');
+        .toEqual(undefined);
     });
   });
 
@@ -102,7 +102,7 @@ describe('manifestUtilities.js', () => {
         .toEqual(2);
 
       expect(data.manifestPath)
-        .toEqual('asdf');
+        .toEqual(resolve('..', '..', '..', 'package.json'));
 
       expect(typeof(data.manifest) === 'object')
         .toEqual(true);

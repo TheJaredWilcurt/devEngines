@@ -113,6 +113,6 @@ export const supportedPackageManagers = Object.freeze([
   'yarn'
 ]);
 export const supportedTools = Object.freeze(Array.from(new Set([
-  ...supportedTools,
-  ...supportedRuntimes
+  ...supportedRuntimes,
+  ...supportedPackageManagers
 ])));
