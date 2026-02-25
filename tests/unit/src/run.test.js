@@ -73,7 +73,7 @@ describe('run.js', () => {
         await run(false, 'node@latest');
 
         expect(console.log)
-          .toHaveBeenCalledWith('Pin local Node to 25.6.1');
+          .toHaveBeenCalledWith('Pin local Node to 25.7.0');
       });
 
       test('Run devEngines node@', async () => {
