@@ -2,7 +2,7 @@
  * @file This is a dummy stub for unsupported tools.
  */
 
-const message = 'Tool unsupported';
+export const message = 'Tool unsupported';
 
 /**
  * STUB.
