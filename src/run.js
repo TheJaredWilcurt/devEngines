@@ -74,8 +74,10 @@ export const run = async function (isGlobal, arg) {
   } else if (arg.split('@').length) {
     let name = arg.split('@')[0];
     let version = arg.split('@')[1];
-    if (supportedTools.includes(name)) {
+    if (supportedTools.includes(name) && version) {
       await updateTool(name, version);
+    } else {
+      showHelpMenu();
     }
   } else {
     showHelpMenu();
