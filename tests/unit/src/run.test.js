@@ -1,5 +1,5 @@
-import { run, updateAllTools } from '@/run.js';
 import { helpMessage } from '@/helpMenu.js';
+import { run, updateAllTools } from '@/run.js';
 
 import { CLI_VERSION, HELP_MENU } from '@@/data/constants.js';
 
