@@ -212,6 +212,7 @@ const setDevEnginesSubSection = function (subSection, name, version) {
       'Could not set ' + name + '@' + version +
       ' in package.json:devEngines:' + subSection + '.'
     );
+    return;
   }
   manifest.devEngines = manifest.devEngines || {};
   manifest.devEngines[subSection] = manifest.devEngines[subSection] || {};

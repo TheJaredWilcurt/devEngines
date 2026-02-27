@@ -1,11 +1,16 @@
-import { unlinkSync, writeFileSync } from 'node:fs';
+import {
+  readFileSync,
+  unlinkSync,
+  writeFileSync
+} from 'node:fs';
 import { join, resolve } from 'node:path';
 
 import {
   findManifest,
   getGlobalToolVersions,
   getManifestData,
-  getRawToolVersions
+  getRawToolVersions,
+  setToolInDevEngines
 } from '@/manifestUtilities.js';
 
 const __dirname = import.meta.dirname;
@@ -163,6 +168,126 @@ describe('manifestUtilities.js', () => {
 
       expect(getRawToolVersions())
         .toEqual({});
+    });
+  });
+
+  describe('setToolInDevEngines', () => {
+    test('Logs for unsupported tool', () => {
+      setToolInDevEngines('asdf', '1.0.0');
+
+      expect(console.log)
+        .toHaveBeenCalledWith('Your version of devEngines CLI does not support "asdf".');
+    });
+
+    test('Logs when no manifest found', () => {
+      process.chdir(
+        join(
+          __dirname,
+          '..',
+          '..',
+          'data',
+          '22',
+          '21',
+          '20',
+          '19',
+          '18',
+          '17',
+          '16',
+          '15',
+          '14',
+          '13',
+          '12',
+          '11',
+          '10',
+          '9',
+          '8',
+          '7',
+          '6',
+          '5',
+          '4',
+          '3',
+          '2',
+          '1',
+          '0'
+        )
+      );
+
+      setToolInDevEngines('node', '11.0.0');
+
+      expect(console.log)
+        .toHaveBeenCalledWith(
+          'Could not set node@11.0.0 in package.json:devEngines:runtime.'
+        );
+    });
+
+    describe('Set versions in file without devEngines', () => {
+      const setVersionsPath = join(__dirname, '..', '..', 'data', 'setVersions');
+      const setVersionsManifestPath = join(setVersionsPath, 'package.json');
+
+      function resetDummyFile () {
+        const data = JSON.stringify({ name: 'set-versions' }, null, 2);
+        writeFileSync(setVersionsManifestPath, data + '\n');
+      }
+      function checkDummyFile () {
+        return String(readFileSync(setVersionsManifestPath)).trim();
+      }
+
+      beforeEach(() => {
+        process.chdir(setVersionsPath);
+        resetDummyFile();
+      });
+
+      afterEach(() => {
+        resetDummyFile();
+      });
+
+      test('Sets node@25.0.0', () => {
+        expect(checkDummyFile())
+          .toEqual([
+            '{',
+            '  "name": "set-versions"',
+            '}'
+          ].join('\n'));
+
+        setToolInDevEngines('node', '25.0.0');
+
+        expect(checkDummyFile())
+          .toEqual([
+            '{',
+            '  "name": "set-versions",',
+            '  "devEngines": {',
+            '    "runtime": {',
+            '      "name": "node",',
+            '      "version": "25.0.0"',
+            '    }',
+            '  }',
+            '}'
+          ].join('\n'));
+      });
+
+      test('Sets npm@11.0.0', () => {
+        expect(checkDummyFile())
+          .toEqual([
+            '{',
+            '  "name": "set-versions"',
+            '}'
+          ].join('\n'));
+
+        setToolInDevEngines('npm', '11.0.0');
+
+        expect(checkDummyFile())
+          .toEqual([
+            '{',
+            '  "name": "set-versions",',
+            '  "devEngines": {',
+            '    "packageManager": {',
+            '      "name": "npm",',
+            '      "version": "11.0.0"',
+            '    }',
+            '  }',
+            '}'
+          ].join('\n'));
+      });
     });
   });
 });

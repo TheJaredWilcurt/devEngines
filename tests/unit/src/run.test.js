@@ -90,7 +90,7 @@ describe('run.js', () => {
         await run(false, 'npm@latest');
 
         expect(console.log)
-          .toHaveBeenCalledWith('Pin local npm to 11.10.1');
+          .toHaveBeenCalledWith('Pin local npm to 11.11.0');
       });
 
       test('Run devEngines npm@', async () => {
