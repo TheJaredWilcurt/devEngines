@@ -72,14 +72,14 @@ describe('npm.js', () => {
       const result = await npm.resolveVersion('latest');
 
       expect(result)
-        .toMatchInlineSnapshot('"11.10.1"');
+        .toMatchInlineSnapshot(`"11.11.0"`);
     });
 
     test('Returns the LTS npm version', async () => {
       const result = await npm.resolveVersion('lts');
 
       expect(result)
-        .toMatchInlineSnapshot('"11.10.1"');
+        .toMatchInlineSnapshot(`"11.11.0"`);
     });
 
     test('Returns the latest npm version 9', async () => {

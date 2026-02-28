@@ -1,6 +1,30 @@
 {
-  "date": 1771459665679,
+  "date": 1772254642204,
   "data": [
+    {
+      "version": "25.7.0",
+      "date": "2026-02-24",
+      "files": [
+        "aix-ppc64",
+        "headers",
+        "linux-arm64",
+        "linux-ppc64le",
+        "linux-s390x",
+        "linux-x64",
+        "osx-arm64-tar",
+        "osx-x64-pkg",
+        "osx-x64-tar",
+        "src",
+        "win-arm64-7z",
+        "win-arm64-zip",
+        "win-x64-7z",
+        "win-x64-exe",
+        "win-x64-msi",
+        "win-x64-zip"
+      ],
+      "npm": "11.10.1",
+      "lts": false
+    },
     {
       "version": "25.6.1",
       "date": "2026-02-09",
@@ -216,6 +240,30 @@
       ],
       "npm": "11.6.2",
       "lts": false
+    },
+    {
+      "version": "24.14.0",
+      "date": "2026-02-24",
+      "files": [
+        "aix-ppc64",
+        "headers",
+        "linux-arm64",
+        "linux-ppc64le",
+        "linux-s390x",
+        "linux-x64",
+        "osx-arm64-tar",
+        "osx-x64-pkg",
+        "osx-x64-tar",
+        "src",
+        "win-arm64-7z",
+        "win-arm64-zip",
+        "win-x64-7z",
+        "win-x64-exe",
+        "win-x64-msi",
+        "win-x64-zip"
+      ],
+      "npm": "11.9.0",
+      "lts": "Krypton"
     },
     {
       "version": "24.13.1",

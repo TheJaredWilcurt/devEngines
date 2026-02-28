@@ -109,14 +109,14 @@ describe('node.js', () => {
       const result = await node.resolveVersion('latest');
 
       expect(result)
-        .toMatchInlineSnapshot('"25.6.1"');
+        .toMatchInlineSnapshot(`"25.7.0"`);
     });
 
     test('Returns the LTS Node version', async () => {
       const result = await node.resolveVersion('lts');
 
       expect(result)
-        .toMatchInlineSnapshot('"24.13.1"');
+        .toMatchInlineSnapshot(`"24.14.0"`);
     });
 
     test('Returns the latest Node version 22', async () => {
