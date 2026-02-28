@@ -13,7 +13,7 @@
     "outdated": "npm outdated"
   },
   "dependencies": {
-    "axios": "^1.13.5",
+    "axios": "^1.13.6",
     "semver": "^7.7.4"
   },
   "devDependencies": {
