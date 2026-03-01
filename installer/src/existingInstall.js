@@ -1,5 +1,5 @@
 /**
- * @file Logic for dealing with existing devEngines installs.
+ * @file Logic for dealing with existing devEngines CLI installs.
  */
 
 import console from 'node:console';
