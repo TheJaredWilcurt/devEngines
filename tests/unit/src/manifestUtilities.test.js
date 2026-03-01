@@ -175,7 +175,7 @@ describe('manifestUtilities.js', () => {
   describe('mutateManifest', () => {
     test('Manifest has no devEngines', () => {
       let manifest = {};
-      mutateManifest(manifest, 'runtime', 'node', '25.0.0')
+      mutateManifest(manifest, 'runtime', 'node', '25.0.0');
 
       expect(manifest)
         .toEqual({

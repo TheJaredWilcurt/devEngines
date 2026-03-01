@@ -223,7 +223,7 @@ export const mutateManifest = function (manifest, subSection, name, version) {
   } else {
     manifest.devEngines[subSection] = { name, version };
   }
-}
+};
 
 /**
  * Reads in the user's package.json, pins the desired tool version in the
@@ -247,7 +247,7 @@ const setDevEnginesSubSection = function (subSection, name, version) {
     );
     return;
   }
-  mutateManifest(manifest, subSection, name, version)
+  mutateManifest(manifest, subSection, name, version);
   let mutatedManifest = JSON.stringify(manifest, null, indentation);
   mutatedManifest = mutatedManifest.replaceAll('\n', eol);
   writeFileSync(manifestPath, mutatedManifest);

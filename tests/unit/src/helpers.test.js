@@ -31,7 +31,7 @@ describe('helpers.js', () => {
       ['5 spaces', '     ', 5],
       ['6 spaces', '      ', 6],
       ['7 spaces', '       ', 7],
-      ['8 spaces', '        ', 8],
+      ['8 spaces', '        ', 8]
     ])('Detects %s', (name, indentation, amount) => {
       const data = [
         '{',
