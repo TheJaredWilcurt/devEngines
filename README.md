@@ -8,10 +8,18 @@
 
 JavaScript tooling management.
 
+* **Fully automatic**
+  * Automatically switches to the correct Node/npm version required by your project.
+  * Downloads the Node/npm versions automatically on first use.
+  * It is impossible to be on the wrong version.
 * **Standards compliant**
   * Uses the official "[devEngines](https://docs.npmjs.com/cli/v11/configuring-npm/package-json#devengines)" standard in the `package.json`.
     * *Used by npm, pnpm, corepack, etc.*
   * The `npm` executable will throw an error if the version used does not match what is defined in the "devEngines" part of the `package.json`.
+* **Focused**
+  * Exclusively supports JavaScript tooling.
+    * Currently just Node and npm, but eventually Deno, Bun, PNPM, and Yarn also.
+  * Streamlined CLI API.
 * **Cross-Platform**
   * Works the same for everyone on your team.
   * One set of setup instructions for everyone.
@@ -20,13 +28,6 @@ JavaScript tooling management.
   * Open source (MIT licensed)
   * Written in JS
   * Can easily be maintained by the JS community
-* **Fully automatic**
-  * Automatically switches to the correct Node/npm version required by your project.
-  * Downloads the Node/npm versions automatically on first use.
-  * It is impossible to be on the wrong version.
-* **Focused**
-  * Exclusively supports JavaScript tooling.
-  * Streamlined CLI API.
 * **100% Test Coverage**
 
 

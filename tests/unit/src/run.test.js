@@ -1,3 +1,4 @@
+import { helpMessage } from '@/helpMenu.js';
 import { run, updateAllTools } from '@/run.js';
 
 import { CLI_VERSION, HELP_MENU } from '@@/data/constants.js';
@@ -80,12 +81,7 @@ describe('run.js', () => {
         await run(false, 'node@');
 
         expect(console.log)
-          .toHaveBeenCalledWith([
-            'Missing Node version, try:',
-            'devEngines [toolname]@[version]',
-            'Like this:',
-            'devEngines node@latest'
-          ].join('\n'));
+          .toHaveBeenCalledWith(helpMessage);
       });
     });
 
@@ -101,12 +97,7 @@ describe('run.js', () => {
         await run(false, 'npm@');
 
         expect(console.log)
-          .toHaveBeenCalledWith([
-            'Missing npm version, try:',
-            'devEngines [toolname]@[version]',
-            'Like this:',
-            'devEngines npm@latest'
-          ].join('\n'));
+          .toHaveBeenCalledWith(helpMessage);
       });
     });
 
