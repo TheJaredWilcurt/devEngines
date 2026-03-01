@@ -1,3 +1,4 @@
+import { helpMessage } from '@/helpMenu.js';
 import { run, updateAllTools } from '@/run.js';
 
 import { CLI_VERSION, HELP_MENU } from '@@/data/constants.js';
@@ -73,19 +74,14 @@ describe('run.js', () => {
         await run(false, 'node@latest');
 
         expect(console.log)
-          .toHaveBeenCalledWith('Pin local Node to 25.6.1');
+          .toHaveBeenCalledWith('Pin local Node to 25.7.0');
       });
 
       test('Run devEngines node@', async () => {
         await run(false, 'node@');
 
         expect(console.log)
-          .toHaveBeenCalledWith([
-            'Missing Node version, try:',
-            'devEngines [toolname]@[version]',
-            'Like this:',
-            'devEngines node@latest'
-          ].join('\n'));
+          .toHaveBeenCalledWith(helpMessage);
       });
     });
 
@@ -94,19 +90,14 @@ describe('run.js', () => {
         await run(false, 'npm@latest');
 
         expect(console.log)
-          .toHaveBeenCalledWith('Pin local npm to 11.10.1');
+          .toHaveBeenCalledWith('Pin local npm to 11.11.0');
       });
 
       test('Run devEngines npm@', async () => {
         await run(false, 'npm@');
 
         expect(console.log)
-          .toHaveBeenCalledWith([
-            'Missing npm version, try:',
-            'devEngines [toolname]@[version]',
-            'Like this:',
-            'devEngines npm@latest'
-          ].join('\n'));
+          .toHaveBeenCalledWith(helpMessage);
       });
     });
 
