@@ -10,6 +10,7 @@ import {
   getGlobalToolVersions,
   getManifestData,
   getRawToolVersions,
+  mutateManifest,
   setToolInDevEngines
 } from '@/manifestUtilities.js';
 
@@ -168,6 +169,137 @@ describe('manifestUtilities.js', () => {
 
       expect(getRawToolVersions())
         .toEqual({});
+    });
+  });
+
+  describe('mutateManifest', () => {
+    test('Manifest has no devEngines', () => {
+      let manifest = {};
+      mutateManifest(manifest, 'runtime', 'node', '25.0.0')
+
+      expect(manifest)
+        .toEqual({
+          devEngines: {
+            runtime: {
+              name: 'node',
+              version: '25.0.0'
+            }
+          }
+        });
+    });
+
+    test('Sub-section is array', () => {
+      let manifest = {
+        devEngines: {
+          runtime: [
+            {
+              name: 'bun',
+              version: '1.0.0'
+            }
+          ]
+        }
+      };
+      mutateManifest(manifest, 'runtime', 'node', '25.0.0');
+
+      expect(manifest)
+        .toEqual({
+          devEngines: {
+            runtime: [
+              {
+                name: 'bun',
+                version: '1.0.0'
+              },
+              {
+                name: 'node',
+                version: '25.0.0'
+              }
+            ]
+          }
+        });
+    });
+
+    test('Sub-section is array with the tool already present', () => {
+      let manifest = {
+        devEngines: {
+          runtime: [
+            {
+              name: 'node',
+              version: '24.0.0'
+            },
+            {
+              name: 'bun',
+              version: '1.0.0'
+            }
+          ]
+        }
+      };
+      mutateManifest(manifest, 'runtime', 'node', '25.0.0');
+
+      expect(manifest)
+        .toEqual({
+          devEngines: {
+            runtime: [
+              {
+                name: 'node',
+                version: '25.0.0'
+              },
+              {
+                name: 'bun',
+                version: '1.0.0'
+              }
+            ]
+          }
+        });
+    });
+
+    test('Sub-section is an object with a different tool', () => {
+      let manifest = {
+        devEngines: {
+          runtime: {
+            name: 'bun',
+            version: '1.0.0'
+          }
+        }
+      };
+      mutateManifest(manifest, 'runtime', 'node', '25.0.0');
+
+      expect(manifest)
+        .toEqual({
+          devEngines: {
+            runtime: [
+              {
+                name: 'bun',
+                version: '1.0.0'
+              },
+              {
+                name: 'node',
+                version: '25.0.0'
+              }
+            ]
+          }
+        });
+    });
+
+    test('Sub-section is an object with the tool present', () => {
+      let manifest = {
+        devEngines: {
+          runtime: {
+            name: 'node',
+            version: '24.0.0'
+          }
+        }
+      };
+      mutateManifest(manifest, 'runtime', 'node', '25.0.0');
+
+      expect(manifest)
+        .toEqual({
+          devEngines: {
+            runtime: {
+              name: 'node',
+              version: '25.0.0'
+            }
+          }
+        });
     });
   });
 

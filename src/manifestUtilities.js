@@ -193,27 +193,14 @@ export const getRawToolVersions = function () {
 /** @typedef {'node'|'npm'|'bun'|'deno'|'pnpm'|'yarn'} TOOLNAME*/
 
 /**
- * Reads in the user's package.json, pins the desired tool version in the
- * correct sub-section. Handles existing object or arrays.
+ * Sets the tool version in the manifest.
  *
+ * @param {object}     manifest    The user's parsed package.json.
  * @param {SUBSECTION} subSection  The sub-section to set in the devEngines
  * @param {TOOLNAME}   name        The desired tool to pin in devEngines
  * @param {string}     version     The desired version to pin in devEngines
  */
-const setDevEnginesSubSection = function (subSection, name, version) {
-  const {
-    eol,
-    indentation,
-    manifest,
-    manifestPath
-  } = getManifestData();
-  if (!manifestPath || !manifest) {
-    console.log(
-      'Could not set ' + name + '@' + version +
-      ' in package.json:devEngines:' + subSection + '.'
-    );
-    return;
-  }
+export const mutateManifest = function (manifest, subSection, name, version) {
   manifest.devEngines = manifest.devEngines || {};
   manifest.devEngines[subSection] = manifest.devEngines[subSection] || {};
   if (Array.isArray(manifest.devEngines[subSection])) {
@@ -236,6 +223,31 @@ const setDevEnginesSubSection = function (subSection, name, version) {
   } else {
     manifest.devEngines[subSection] = { name, version };
   }
+}
+
+/**
+ * Reads in the user's package.json, pins the desired tool version in the
+ * correct sub-section. Handles existing object or arrays.
+ *
+ * @param {SUBSECTION} subSection  The sub-section to set in the devEngines
+ * @param {TOOLNAME}   name        The desired tool to pin in devEngines
+ * @param {string}     version     The desired version to pin in devEngines
+ */
+const setDevEnginesSubSection = function (subSection, name, version) {
+  const {
+    eol,
+    indentation,
+    manifest,
+    manifestPath
+  } = getManifestData();
+  if (!manifestPath || !manifest) {
+    console.log(
+      'Could not set ' + name + '@' + version +
+      ' in package.json:devEngines:' + subSection + '.'
+    );
+    return;
+  }
+  mutateManifest(manifest, subSection, name, version)
   let mutatedManifest = JSON.stringify(manifest, null, indentation);
   mutatedManifest = mutatedManifest.replaceAll('\n', eol);
   writeFileSync(manifestPath, mutatedManifest);
